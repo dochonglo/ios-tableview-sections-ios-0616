@@ -7,6 +7,7 @@
 //
 
 #import "FISTableViewController.h"
+#import "FISStudent.h"
 
 @interface FISTableViewController ()
 
@@ -14,34 +15,66 @@
 
 @implementation FISTableViewController
 
+// Make some FISStudents and give them all names. Then fill in their favoriteThings properties with strings of their favorite things.
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    FISStudent *student1 = [[FISStudent alloc] initWithName:@"Ismael" favoriteThings:@[@"Reading", @"Youtube", @"Design"]];
+    FISStudent *student2 = [[FISStudent alloc] initWithName:@"Eldon" favoriteThings:@[@"Music", @"Basketball", @"Shoes"]];
+    FISStudent *student3 = [[FISStudent alloc] initWithName:@"David" favoriteThings:@[@"Lord of the Rings", @"Side-projects", @"Cats"]];
+    FISStudent *student4 = [[FISStudent alloc] initWithName:@"Bettina" favoriteThings:@[@"Harry Potter", @"Food", @"iOS"]];
+    FISStudent *student5 = [[FISStudent alloc] initWithName:@"Rebecca" favoriteThings:@[@"Game of Thrones", @"Medevil History"]];
+
+    self.students = @[student1, student2, student3, student4, student5];
 }
 
 #pragma mark - Table view data source
 
+// Each student should have their own section:
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    
+    return (NSInteger)[self.students count];
+    
 }
 
+// Change the headers such that it is the student's name property:
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    FISStudent *studentName = self.students[section];
+    
+    return studentName.name;
+
+}
+
+// The rows in each section match that student's favoriteThings:
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+
+    FISStudent *currentStudent = self.students[section];
+    
+    return (NSInteger)[currentStudent.favoriteThings count];
+
 }
 
-/*
+// Set your cell's textLabel to a favorite thing, and its detailTextLabel to its row index:
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    // Configure the cell...
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"expandingCell" forIndexPath:indexPath];
     
+    FISStudent *currentStudent = self.students[indexPath.section];
+    
+    cell.textLabel.text = [currentStudent.favoriteThings objectAtIndex:indexPath.row];
+    
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%li" , indexPath.row + 1];
+
     return cell;
 }
-*/
+
+// Provide an indentation level:
+- (NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 2;
+
+}
 
 /*
 // Override to support conditional editing of the table view.
